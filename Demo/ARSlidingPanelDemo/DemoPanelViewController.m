@@ -77,5 +77,8 @@
     [self.view layoutIfNeeded];
 }
 
+- (IBAction)maximiseViaButton:(id)sender {
+    [self.panelControllerContainer maximizePanelControllerAnimated:true completion:nil];
+}
 
 @end

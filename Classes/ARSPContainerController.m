@@ -304,7 +304,35 @@
 
 - (void)maximizePanelControllerAnimated:(BOOL)animated completion:(void (^)(void))completion
 {
-    [self maximizePanelControllerAnimated:animated animations:nil completion:completion];
+    
+    CGFloat animationDuration = (self.animationDuration ? : 0.3f);
+    CGFloat halfAnimation = animationDuration/2;
+    
+    // timer to change visibility state in half of animation duration
+    // yes, this is a horrible way to test for this. But it works.
+    [NSTimer scheduledTimerWithTimeInterval:halfAnimation
+                                     target:self
+                                   selector:@selector(changeVisibilityStateToIsMaximizing)
+                                   userInfo:nil
+                                    repeats:NO];
+    
+    [self movePanelControllerWithBottomOffset:self.maxPanelHeight ? self.maxPanelHeight : self.panelViewController.view.frame.size.height
+                                     animated:animated
+                            animationDuration:animationDuration
+                                   animations:nil
+                                   completion:^{
+                                       self.visibilityState = ARSPVisibilityStateMaximized;
+                                       [self installPanelViewControllerConstraintToTop];
+                                       
+                                       if (completion) {
+                                           completion();
+                                       }
+                                   }];
+    
+}
+
+- (void)changeVisibilityStateToIsMaximizing {
+    self.visibilityState = ARSPVisibilityStateIsMaximizing;
 }
 
 - (void)minimizePanelControllerAnimated:(BOOL)animated completion:(void (^)(void))completion

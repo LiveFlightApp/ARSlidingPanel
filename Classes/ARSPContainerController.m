@@ -306,7 +306,7 @@
 {
     
     CGFloat animationDuration = (self.animationDuration ? : 0.3f);
-    CGFloat halfAnimation = animationDuration/2;
+    CGFloat halfAnimation = animationDuration/4;
     
     // timer to change visibility state in half of animation duration
     // yes, this is a horrible way to test for this. But it works.
